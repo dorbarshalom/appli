@@ -11,8 +11,9 @@
     --warning: #f59e0b;
     --danger: #ef4444;
     
-    --bg-color: #f8fafc;
-    --surface: #ffffff;
+    --bg-color: #e0f2fe;
+    --surface: rgba(255, 255, 255, 0.9);
+    --surface-solid: #ffffff;
     
     --text-main: #0f172a;
     --text-muted: #64748b;
@@ -42,7 +43,7 @@
 }
 
 body {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Assistant', 'Outfit', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-main);
     line-height: 1.5;
@@ -57,8 +58,12 @@ body {
     height: 100dvh; /* For mobile browsers */
     max-width: 600px;
     margin: 0 auto;
-    background-color: var(--bg-color);
+    background-image: url('img/background.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
     position: relative;
+    box-shadow: var(--shadow-lg);
 }
 
 /* Tabs */
@@ -129,6 +134,7 @@ body {
 
 .flashcard {
     background: var(--surface);
+    backdrop-filter: blur(8px);
     width: 100%;
     max-width: 400px;
     aspect-ratio: 4 / 3;
@@ -139,6 +145,7 @@ body {
     align-items: center;
     padding: 20px;
     transition: transform 0.3s ease;
+    position: relative;
 }
 
 .flashcard h1 {
@@ -182,25 +189,38 @@ body {
     animation: pulse 1.5s infinite;
 }
 
-.btn-hear {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background-color: transparent;
-    border: 2px solid var(--primary-light);
+.btn-hear-card {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #f1f5f9;
+    border: none;
     color: var(--primary);
-    padding: 8px 16px;
-    border-radius: var(--radius-full);
-    font-family: inherit;
-    font-size: 1rem;
-    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     cursor: pointer;
     transition: all 0.2s;
+    box-shadow: var(--shadow-sm);
+    z-index: 5;
 }
 
-.btn-hear:active {
+.btn-hear-card:active {
     background-color: var(--primary-light);
     color: white;
+    transform: scale(0.9);
+}
+
+.btn-hear-card.hidden {
+    display: none !important;
+}
+
+.btn-hear-card svg {
+    width: 20px;
+    height: 20px;
 }
 
 .hidden {
@@ -209,68 +229,71 @@ body {
 
 /* Controls */
 .controls-container {
-    padding: 20px;
+    padding: 20px 20px 40px 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
+}
+
+.record-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
 }
 
 .btn-record {
-    width: 200px;
-    height: 80px;
-    border-radius: 40px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: transparent;
     border: none;
-    color: white;
-    font-family: inherit;
-    font-size: 1.2rem;
-    font-weight: 600;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.5);
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    overflow: hidden;
     user-select: none;
+    padding: 0;
+}
+
+.mic-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.2s;
 }
 
 .btn-record:active, .btn-record.recording {
-    transform: scale(0.95);
-    background: linear-gradient(135deg, var(--secondary), var(--secondary-light));
-    box-shadow: 0 5px 15px -5px rgba(236, 72, 153, 0.5);
+    transform: scale(0.92);
 }
 
 .btn-record.checking {
-    background: #cbd5e1;
-    box-shadow: none;
+    opacity: 0.6;
     cursor: not-allowed;
     transform: scale(1);
 }
 
-.mic-icon-container {
-    transition: transform 0.2s;
-}
-
-.btn-record.recording .mic-icon-container {
-    transform: translateY(-5px);
+.btn-record.recording .mic-image {
+    transform: scale(1.1);
 }
 
 .record-text {
-    margin-top: 2px;
     font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-muted);
 }
 
 /* Audio Waveform */
 .audio-wave {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 3px;
-    height: 20px;
-    margin-top: 5px;
+    height: 15px;
+    margin-top: 2px;
 }
 
 .audio-wave span {
@@ -314,6 +337,7 @@ body {
 
 .status-stats-card {
     background: var(--surface);
+    backdrop-filter: blur(8px);
     border-radius: var(--radius-xl);
     padding: 25px;
     box-shadow: var(--shadow-md);
@@ -374,6 +398,7 @@ body {
 /* Weekly Streak */
 .weekly-streak-section {
     background: var(--surface);
+    backdrop-filter: blur(8px);
     border-radius: var(--radius-lg);
     padding: 20px;
     box-shadow: var(--shadow-md);
@@ -499,6 +524,7 @@ body {
 /* Badges */
 .badges-section {
     background: var(--surface);
+    backdrop-filter: blur(8px);
     border-radius: var(--radius-lg);
     padding: 20px;
     box-shadow: var(--shadow-md);
